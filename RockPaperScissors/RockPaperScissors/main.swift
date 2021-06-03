@@ -18,24 +18,31 @@ enum GameState: String {
     case draw = "비겼습니다!"
 }
 
-enum Player {
+enum Player: CustomStringConvertible {
     case computer
     case user
+    var description: String {
+        switch self {
+        case .user:
+            return "사용자"
+        case .computer:
+            return "컴퓨터"
+        }
+    }
 }
 
 func printRockPaperScissorsMenu() {
     print("가위(1), 바위(2), 보(3)! <종료 : 0> : ", terminator: "")
 }
 
-func printMukjjipaMenu() {
-    print("묵(1), 찌(2), 빠(3)! <종료 : 0> : ", terminator: "")
+func printMukjjipaMenu(winner: Player) {
+    print("[\(winner.description) 턴] 묵(1), 찌(2), 빠(3)! <종료 : 0> : ", terminator: "")
 }
 
 func generateComputerValue() -> RockPaperScissors {
     guard let value = RockPaperScissors.allCases.randomElement() else {
         return generateComputerValue()
     }
-    print("컴퓨터가 이번에 낸거 \(value)")
     return value
 }
 
@@ -58,7 +65,7 @@ func inputUserValue() -> RockPaperScissors? {
 }
 
 func printWinner(winner: Player) {
-    print("\(winner) 가 승리하엿습니다.", terminator: "")
+    print("\(winner)의 승리!", terminator: "")
 }
 
 func printGameResult(gameResult: GameState) {
@@ -108,7 +115,6 @@ func printWhosTurn(wohsTurn: Player) {
     } else if wohsTurn == .user {
         print("사용자의 턴입니다 ", terminator: "")
     }
-    printMukjjipaMenu()
 }
 
 func compareWhosTurn(thisGameState: GameState) -> Player {
@@ -124,7 +130,6 @@ func startStageOne() {
     guard let userValue = inputUserValue() else {
         return
     }
-    print("유저가 이번에 낸거: \(userValue)")
     let thisGameResult = compareValue(myValue: userValue, otherValue: generateComputerValue())
     if checkIsDraw(thisGameResult: thisGameResult) {
         printGameResult(gameResult: thisGameResult)
@@ -136,18 +141,16 @@ func startStageOne() {
 }
 
 func startStageTwo(thisTurnPlayer: Player) {
-    printWhosTurn(wohsTurn: thisTurnPlayer)
+    printMukjjipaMenu(winner: thisTurnPlayer)
     guard let userValue = inputUserValue() else {
         return
     }
-    print("유저가 이번에 낸거: \(userValue)")
     let thisGameResult = compareValue(myValue: userValue, otherValue: generateComputerValue())
     if checkIsDraw(thisGameResult: thisGameResult){
-        print("묵찌빠에서 비겼다.")
         printWinner(winner: thisTurnPlayer)
         return
     } else {
-        print(compareWhosTurn(thisGameState: thisGameResult))
+        print("\(compareWhosTurn(thisGameState: thisGameResult))의 턴입니다")
         startStageTwo(thisTurnPlayer: compareWhosTurn(thisGameState: thisGameResult))
     }
 }
