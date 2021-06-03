@@ -156,3 +156,4 @@ func startStageTwo(thisTurnPlayer: Player) {
 }
 
 startStageOne()
+
