@@ -18,17 +18,9 @@ enum GameState: String {
     case draw = "비겼습니다!"
 }
 
-enum Player: CustomStringConvertible {
-    case computer
-    case user
-    var description: String {
-        switch self {
-        case .user:
-            return "사용자"
-        case .computer:
-            return "컴퓨터"
-        }
-    }
+enum Player: String {
+    case computer = "컴퓨터"
+    case user = "사용자"
 }
 
 func printRockPaperScissorsMenu() {
@@ -36,7 +28,7 @@ func printRockPaperScissorsMenu() {
 }
 
 func printMukjjipaMenu(winner: Player) {
-    print("[\(winner.description) 턴] 묵(1), 찌(2), 빠(3)! <종료 : 0> : ", terminator: "")
+    print("[\(winner.rawValue) 턴] 묵(1), 찌(2), 빠(3)! <종료 : 0> : ", terminator: "")
 }
 
 func generateComputerValue() -> RockPaperScissors {
@@ -65,7 +57,7 @@ func inputUserValue() -> RockPaperScissors? {
 }
 
 func printWinner(winner: Player) {
-    print("\(winner)의 승리!", terminator: "")
+    print("\(winner.rawValue)의 승리!", terminator: "")
 }
 
 func printGameResult(gameResult: GameState) {
@@ -109,12 +101,8 @@ func checkIsDraw(thisGameResult: GameState) -> Bool {
     }
 }
 
-func printWhosTurn(wohsTurn: Player) {
-    if wohsTurn == .computer {
-        print("컴퓨터의 턴입니다 ", terminator: "")
-    } else if wohsTurn == .user {
-        print("사용자의 턴입니다 ", terminator: "")
-    }
+func printWhosTurn(whosTurn: Player) {
+    print("\(whosTurn.rawValue)의 턴입니다")
 }
 
 func compareWhosTurn(thisGameState: GameState) -> Player {
@@ -150,7 +138,7 @@ func startStageTwo(thisTurnPlayer: Player) {
         printWinner(winner: thisTurnPlayer)
         return
     } else {
-        print("\(compareWhosTurn(thisGameState: thisGameResult))의 턴입니다")
+        printWhosTurn(whosTurn: compareWhosTurn(thisGameState: thisGameResult))
         startStageTwo(thisTurnPlayer: compareWhosTurn(thisGameState: thisGameResult))
     }
 }
